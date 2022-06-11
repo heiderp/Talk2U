@@ -1,0 +1,5 @@
+client/node_modules/
+client/.prettierrc.json
+
+server/node_modules
+server/.prettierrc.json
