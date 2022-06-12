@@ -1,22 +1,25 @@
 const express = require('express')
 const app = express()
-const server = require('http').createServer(app)
-const io = require('socket.io')(server)
-// SETTING
-const PORT = 3001 || process.env.PORT
-app.disable('x-powered-by')
-
-/* // MID
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json()) */
-io.on('connection', (socket) => {
-  console.log('Welcome to Talk2U')
-  socket.emit('message', 'QLQ')
+const http = require('http')
+const { Server } = require('socket.io')
+const cors = require('cors')
+const server = http.createServer(app)
+app.use(cors())
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
 })
 
-// ROUTES
+io.on('connection', (socket) => {
+  console.log(`user:${socket.id}`)
+  socket.on('test', (data) => {
+    console.log(data)
+    socket.emit('return_data', data)
+  })
+})
 
-// SERVER
-server.listen(PORT, () => {
-  console.log(`sever ${PORT}`)
+server.listen(3001, () => {
+  console.log('sever on')
 })
